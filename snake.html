@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style>
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    background: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  canvas {
+    border: 1px solid white;
+  }
+  </style>
+</head>
+<body onload="initialize();">
+<canvas width="600" height="600" id="game"></canvas>
+<script>
+    // * Random fruits
+    // * Fruits are different scores / odds?
+    // * Disappearing / moving fruits
+    // * Obstacles
+    // * Speed up
+    // * Enemy snake?
+    
+var canvas = document.getElementById('game');
+var context = canvas.getContext('2d');
+var score = 0;
+var h = 600, w = 600;
+
+var levels = [
+    {background: "white", color: "purple", grid:20},
+    {background: "black", color: "white", grid:30},
+    {background: "black", color: "gray", grid:40},
+    {background: "blue", color: "green", grid:50},
+    {background: "blue", color: "blue", grid:60},
+    
+]
+var count = 0;
+var level = 0;
+var snake = {
+  x: levels[level].grid*5,
+  y: levels[level].grid*5,
+  
+  // snake velocity. moves one grid length every frame in either the x or y direction
+  dx: 0,
+  dy: 0,
+  
+  // keep track of all grids the snake body occupies
+  cells: [],
+  
+  // length of the snake. grows when eating an apple
+  maxCells: 4
+};
+
+var randomProperty = function (obj) {
+    var keys = Object.keys(obj)
+    return obj[keys[ keys.length * Math.random() << 0]];
+};
+    
+var FruitsEnum = Object.freeze({"apple":1, "orange":2, "banana":3, "lemon":4, "rock":5})
+
+var apples;
+
+    var pickup = new Audio('chirp.wav');
+
+    var image = new Image();
+    image.src = "alienBlue_badge1.png";
+    
+    var appleImage = new Image();
+    appleImage.src = "apple.png";
+    
+    var bananaImage = new Image();
+    bananaImage.src = "banana.png";
+    
+    var orangeImage = new Image();
+    orangeImage.src = "orange.png";
+    
+    var lemonImage = new Image();
+    lemonImage.src = "lemon.png";
+    
+    var rockImage = new Image();
+    rockImage.src = "rock.png";
+    
+    var fruitImages = [null, appleImage, orangeImage, bananaImage, lemonImage, rockImage];
+    var backgroundColor = 0;
+// get random whole numbers in a specific range
+// @see https://stackoverflow.com/a/1527820/2124254
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+    var speed = 10;
+    function updateLevel() {
+//        speed = speed - 1;
+//        console.log(speed);
+        var a = new Object({x:100, y:100, type:FruitsEnum.rock})
+        apples.push(a);
+    }
+    
+    function die() {
+        
+    }
+    
+    function initialize() {
+        reset();
+        setInterval(updateLevel, 15000);
+    }
+    
+    function reset() {
+        apples = [{
+  x: levels[level].grid*8,
+  y: levels[level].grid*8,
+    type: randomProperty(FruitsEnum)
+},
+  {
+  x: levels[level].grid*3,
+  y: levels[level].grid*3,
+      type: randomProperty(FruitsEnum)
+  }
+];
+                  score = 0;
+
+    }
+// game loop
+function loop() {
+  requestAnimationFrame(loop);
+    
+  // slow game loop to 15 fps instead of 60 (60/15 = 4)
+  if (++count < speed) {
+    return;
+  }
+
+  count = 0;
+    context.fillStyle="rgb("+score+","+score+","+score+")";
+
+  context.fillRect(0,0,canvas.width,canvas.height);
+    context.font = "20px Georgia";
+    context.fillStyle='white';
+    context.fillText(score.toString(), 20, 20);
+
+    oldx = snake.x;
+  oldy = snake.y;
+    
+  // move snake by it's velocity
+  snake.x += snake.dx*levels[level].grid;
+  snake.y += snake.dy*levels[level].grid;
+        
+  // wrap snake position horizontally on edge of screen
+  if (snake.x < 0) {
+    snake.x = canvas.width - levels[level].grid;
+  }
+  else if (snake.x >= canvas.width) {
+    snake.x = 0;
+  }
+  
+  // wrap snake position vertically on edge of screen
+  if (snake.y < 0) {
+    snake.y = canvas.height - levels[level].grid;
+  }
+  else if (snake.y >= canvas.height) {
+    snake.y = 0;
+  }
+
+  // keep track of where snake has been. front of the array is always the head
+  snake.cells.unshift({x: snake.x, y: snake.y});
+
+  // remove cells as we move away from them
+  if (snake.cells.length > snake.maxCells) {
+    snake.cells.pop();
+  }
+
+  // draw apple
+  context.fillStyle = 'red';
+    for (var apple = 0; apple < apples.length; apple++) {
+        context.drawImage(fruitImages[apples[apple].type], apples[apple].x, apples[apple].y, levels[level].grid, levels[level].grid);
+    }
+  
+    //draw snake one cell at a time
+
+snake.cells.forEach(function(cell, index) {
+    grid = levels[level].grid
+      context.fillStyle = levels[level].color;
+    //context.fillRect(cell.x, cell.y, grid, grid);  
+    if (index==0) {
+        size = grid+4;
+        offset = -2
+        alpha = 1.0
+    } else {
+        size = grid
+        offset = 0
+        alpha= (0.6 - (0.6 / snake.cells.length)*index)+0.4;
+    }
+    context.save();
+    context.globalAlpha = alpha;
+    context.drawImage(image, cell.x+offset+getRandomInt(-1,2), cell.y+offset+getRandomInt(-1,2), size, size);
+    context.restore();
+    // snake ate apple
+    for (var a = 0; a < apples.length; a++) {
+        if (cell.x === apples[a].x && cell.y === apples[a].y) {
+            snake.maxCells++;
+
+    //      level = getRandomInt(0, levels.length);
+          // canvas is 400x400 which is 25x25 grids 
+          apples[a].x = getRandomInt(0, w/levels[level].grid) * levels[level].grid;
+          apples[a].y = getRandomInt(0, h/levels[level].grid) * levels[level].grid;
+          apples[a].type=randomProperty(FruitsEnum)
+
+          score = score + 1;
+            pickup.play();
+            
+        }
+    }
+
+    // check collision with all cells after this one (modified bubble sort)
+    for (var i = index + 1; i < snake.cells.length; i++) {
+      
+      // snake occupies same space as a body part. reset game
+      if (cell.x === snake.cells[i].x && cell.y === snake.cells[i].y) {
+        snake.x = levels[level].grid*5;
+        snake.y = levels[level].grid*5;
+        snake.cells = [];
+        snake.maxCells = 4;
+        snake.dx = 1;
+        snake.dy = 0;
+
+        reset();
+      }
+    }
+  });
+
+
+}
+
+// listen to keyboard events to move the snake
+document.addEventListener('keydown', function(e) {
+  // prevent snake from backtracking on itself by checking that it's 
+  // not already moving on the same axis (pressing left while moving
+  // left won't do anything, and pressing right while moving left
+  // shouldn't let you collide with your own body)
+  
+  // left arrow key
+  if (e.which === 37 && snake.dx === 0) {
+    snake.dx = -1;
+    snake.dy = 0;
+  }
+  // up arrow key
+  else if (e.which === 38 && snake.dy === 0) {
+    snake.dy = -1;
+    snake.dx = 0;
+  }
+  // right arrow key
+  else if (e.which === 39 && snake.dx === 0) {
+    snake.dx = 1;
+    snake.dy = 0;
+  }
+  // down arrow key
+  else if (e.which === 40 && snake.dy === 0) {
+    snake.dy = 1;
+    snake.dx = 0;
+  }
+});
+
+// start the game
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
