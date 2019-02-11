@@ -9,7 +9,7 @@
   }
 
   body {
-    background: black;
+    background: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -20,7 +20,10 @@
   </style>
 </head>
 <body onload="initialize();">
-<canvas width="600" height="600" id="game"></canvas>
+    <script type='text/javascript' src='https://darksky.net/widget/default/34.103131,-11.8416253/us12/en.js?height=500&title=Full Forecast&textColor=333333&bgColor=FFFFFF&skyColor=333&fontFamily=Default&units=us&htColor=333333&ltColor=C7C7C7&displaySum=yes&displayHeader=yes'></script>
+    <script type='text/javascript' src='https://darksky.net/widget/default/42.673022,-71.088049/us12/en.js?height=500&title=Full Forecast&textColor=333333&bgColor=FFFFFF&skyColor=333&fontFamily=Default&units=us&htColor=333333&ltColor=C7C7C7&displaySum=yes&displayHeader=yes'></script>
+
+    <canvas width="600" height="600" id="game"></canvas>
 <script>
     // * Random fruits
     // * Fruits are different scores / odds?
@@ -35,7 +38,7 @@ var score = 0;
 var h = 600, w = 600;
 
 var levels = [
-    {background: "white", color: "purple", grid:20},
+    {background: "white", color: "purple", grid:30},
     {background: "black", color: "white", grid:30},
     {background: "black", color: "gray", grid:40},
     {background: "blue", color: "green", grid:50},
@@ -71,7 +74,10 @@ var apples;
     var pickup = new Audio('chirp.wav');
 
     var image = new Image();
-    image.src = "alienBlue_badge1.png";
+    image.src = "greenBody.png";
+    
+    var head = new Image();
+    head.src = "greenHead.png";
     
     var appleImage = new Image();
     appleImage.src = "apple.png";
@@ -96,9 +102,9 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-    var speed = 10;
+    var speed = 5;
     function updateLevel() {
-//        speed = speed - 1;
+        speed = Math.max(speed - 1, 2);
 //        console.log(speed);
         var a = new Object({x:100, y:100, type:FruitsEnum.rock})
         apples.push(a);
@@ -149,8 +155,8 @@ function loop() {
   oldy = snake.y;
     
   // move snake by it's velocity
-  snake.x += snake.dx*levels[level].grid;
-  snake.y += snake.dy*levels[level].grid;
+  snake.x += snake.dx*levels[level].grid/4;
+  snake.y += snake.dy*levels[level].grid/4;
         
   // wrap snake position horizontally on edge of screen
   if (snake.x < 0) {
@@ -188,22 +194,31 @@ snake.cells.forEach(function(cell, index) {
     grid = levels[level].grid
       context.fillStyle = levels[level].color;
     //context.fillRect(cell.x, cell.y, grid, grid);  
+    
     if (index==0) {
-        size = grid+4;
-        offset = -2
+        size = grid+8;
+        offset = -4
         alpha = 1.0
+        drawable = head;
+    } else if (index > 10) {
+        size = Math.max(grid+4-(index-10), 2);
+        offset = -(4-(index-10))/2
+        alpha = 1.0 - ((index-10)/100)
+//        alpha= (0.8 - (0.8 / snake.cells.length)*index)+0.2;
+        drawable = image;
     } else {
-        size = grid
-        offset = 0
-        alpha= (0.6 - (0.6 / snake.cells.length)*index)+0.4;
+        size = grid+4;
+        offset = -2;
+        alpha = 1.0;
+        drawable = image;
     }
     context.save();
     context.globalAlpha = alpha;
-    context.drawImage(image, cell.x+offset+getRandomInt(-1,2), cell.y+offset+getRandomInt(-1,2), size, size);
+    context.drawImage(drawable, cell.x+offset, cell.y+offset, size, size);
     context.restore();
     // snake ate apple
     for (var a = 0; a < apples.length; a++) {
-        if (cell.x === apples[a].x && cell.y === apples[a].y) {
+        if (Math.abs(cell.x-apples[a].x)<(levels[level].grid+8)/3 && Math.abs(cell.y - apples[a].y)< (levels[level].grid+8)/3) {
             snake.maxCells++;
 
     //      level = getRandomInt(0, levels.length);
@@ -234,6 +249,16 @@ snake.cells.forEach(function(cell, index) {
       }
     }
   });
+    
+        size = grid+8;
+        offset = -4
+        alpha = 1.0
+        drawable = head;
+
+    context.save();
+    context.globalAlpha = alpha;
+    context.drawImage(drawable, snake.cells[0].x+offset, snake.cells[0].y+offset, size, size);
+    context.restore();
 
 
 }
