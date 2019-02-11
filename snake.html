@@ -20,8 +20,6 @@
   </style>
 </head>
 <body onload="initialize();">
-    <script type='text/javascript' src='https://darksky.net/widget/default/34.103131,-11.8416253/us12/en.js?height=500&title=Full Forecast&textColor=333333&bgColor=FFFFFF&skyColor=333&fontFamily=Default&units=us&htColor=333333&ltColor=C7C7C7&displaySum=yes&displayHeader=yes'></script>
-    <script type='text/javascript' src='https://darksky.net/widget/default/42.673022,-71.088049/us12/en.js?height=500&title=Full Forecast&textColor=333333&bgColor=FFFFFF&skyColor=333&fontFamily=Default&units=us&htColor=333333&ltColor=C7C7C7&displaySum=yes&displayHeader=yes'></script>
 
     <canvas width="600" height="600" id="game"></canvas>
 <script>
@@ -201,8 +199,8 @@ snake.cells.forEach(function(cell, index) {
         alpha = 1.0
         drawable = head;
     } else if (index > 10) {
-        size = Math.max(grid+4-(index-10), 2);
-        offset = -(4-(index-10))/2
+        size = Math.max(grid+8-(index-10), 2);
+        offset = -(8-(index-10))/2
         alpha = 1.0 - ((index-10)/100)
 //        alpha= (0.8 - (0.8 / snake.cells.length)*index)+0.2;
         drawable = image;
