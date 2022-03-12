@@ -1090,7 +1090,13 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
     var Za = "IN_PROGRESS",
         es = "WIN",
         as = "FAIL",
-        ss = ["Well roared, Lion!", "'Twere well it were done quickly!", "Well shone, Moon!", "'Tis well done", "'Tis enough, 'twill serve", "Marry, well remembered"],
+        ss = [["Well roared, Lion!", "Our praises are our wages!", "My dancing soul doth celebrate!"],
+              ["'Twere well it were done quickly!",  "I profit in the knowledge of myself"],
+              ["Well shone, Moon!", "Good things should be praised", "Well, the gods give us joy!"],
+              ["'Tis well done", "All may be well enough."],
+              ["'Tis enough, 'twill serve", "Too low for a high praise", "Great Jupiter be praised!"],
+              ["Marry, well remembered", "Too little for a great praise", "I will praise anyone that will praise me"]
+            ],
         ts = function(e) {
             r(t, e);
             var a = h(t);
@@ -1253,7 +1259,7 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                     })), this.$game.addEventListener("game-last-tile-revealed-in-row", (function(a) {
                         e.$keyboard.letterEvaluations = e.letterEvaluations, e.rowIndex < 6 && (e.canInput = !0);
                         var s = e.$board.querySelectorAll("game-row")[e.rowIndex - 1];
-                        (a.path || a.composedPath && a.composedPath()).includes(s) && ([es, as].includes(e.gameStatus) && (e.restoringFromLocalStorage ? e.showStatsModal() : (e.gameStatus === es && (s.setAttribute("win", ""), e.addToast(ss[e.rowIndex - 1], 2e3)), e.gameStatus === as && e.addToast(e.solution.toUpperCase(), 1 / 0), setTimeout((function() {
+                        (a.path || a.composedPath && a.composedPath()).includes(s) && ([es, as].includes(e.gameStatus) && (e.restoringFromLocalStorage ? e.showStatsModal() : (e.gameStatus === es && (s.setAttribute("win", ""), e.addToast(ss[e.rowIndex - 1][Math.floor(Math.random() * ss[e.rowIndex - 1].length)], 2e3)), e.gameStatus === as && e.addToast(e.solution.toUpperCase(), 1 / 0), setTimeout((function() {
                             e.showStatsModal()
                         }), 2500))), e.restoringFromLocalStorage = !1)
                     })), this.shadowRoot.addEventListener("game-setting-change", (function(a) {
