@@ -1227,6 +1227,7 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                     var e = this.shadowRoot.querySelector("#board-container"),
                         a = Math.min(Math.floor(e.clientHeight * (5 / 6)), 350),
                         s = 6 * Math.floor(a / 5);
+
                     this.$board.style.width = "".concat(a, "px"), this.$board.style.height = "".concat(s, "px")
                 }
             }, {
@@ -1246,6 +1247,14 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                 key: "connectedCallback",
                 value: function() {
                     var e = this;
+                    var min_vertical_move = 50;
+                       var max_horizontal_move = 50;
+                       var within_ms = 2000;
+
+                       var start_xPos;
+                       var start_yPos;
+                       var start_time;
+                       var height;
                     this.shadowRoot.appendChild(Ka.content.cloneNode(!0)), this.$game = this.shadowRoot.querySelector("#game"), this.$board = this.shadowRoot.querySelector("#board"), this.$keyboard = this.shadowRoot.querySelector("game-keyboard"), this.sizeBoard(), this.lastPlayedTs || setTimeout((function() {
                         return e.showHelpModal()
                     }), 100);
@@ -1253,6 +1262,29 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                         var s = document.createElement("game-row");
                         s.setAttribute("letters", this.boardState[a]), s.setAttribute("length", 5), this.evaluations[a] && (s.evaluation = this.evaluations[a]), this.$board.appendChild(s)
                     }
+                    this.shadowRoot.querySelector("game-keyboard").addEventListener("touchstart", (function(event) {
+                        start_xPos = event.touches[0].pageX;
+                        start_yPos = event.touches[0].pageY;
+                        start_time = new Date();
+                    })),
+                    this.shadowRoot.querySelector("game-keyboard").addEventListener("touchend", (function(event) {
+                      var end_xPos = event.changedTouches[0].pageX;
+                             var end_yPos = event.changedTouches[0].pageY;
+                             var end_time = new Date();
+                             let move_x = end_xPos - start_xPos;
+                             let move_y = end_yPos - start_yPos;
+                             let elapsed_time = end_time - start_time;
+                             if (Math.abs(move_y) > min_vertical_move && Math.abs(move_x) < max_horizontal_move && elapsed_time < within_ms) {
+                                 if (move_y < 0) {
+                                   event.target.setAttribute("style", "height:"+height+"px;");
+                                 } else {
+                                   height = event.target.style.height;
+                                   event.target.setAttribute("style", "height:100px;");
+
+                                 }
+                             }
+                    })),
+
                     this.$game.addEventListener("game-key-press", (function(a) {
                         var s = a.detail.key;
                         "←" === s || "Backspace" === s ? e.removeLetter() : "↵" === s || "Enter" === s ? e.submitGuess() : Ba.includes(s.toLowerCase()) && e.addLetter(s.toLowerCase())
@@ -1391,7 +1423,8 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                                 o = a.ctrlKey;
                             t || o || (Ba.includes(s.toLowerCase()) || "Backspace" === s || "Enter" === s) && e.dispatchKeyPressEvent(s)
                         }
-                    })), this.$keyboard.addEventListener("transitionend", (function(a) {
+                    })),
+                    this.$keyboard.addEventListener("transitionend", (function(a) {
                         var s = a.target.closest("button");
                         s && e.$keyboard.contains(s) && s.classList.remove("fade")
                     })), ds.forEach((function(a) {
