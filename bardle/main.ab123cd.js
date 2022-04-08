@@ -1772,7 +1772,7 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                                         }
                                     })), d += "\n")
                                 })), {
-                                    text: "".concat(l, "\n\n").concat(d.trimEnd())
+                                    text: "".concat(l, "\n\n").concat(d.trimEnd()).concat("\nhttps://bit.ly/3jfTiF5")
                                 }
                             }({
                                 evaluations: e.gameApp.evaluations,
