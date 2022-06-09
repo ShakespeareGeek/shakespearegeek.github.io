@@ -1227,7 +1227,6 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                     var e = this.shadowRoot.querySelector("#board-container"),
                         a = Math.min(Math.floor(e.clientHeight * (5 / 6)), 350),
                         s = 6 * Math.floor(a / 5);
-
                     this.$board.style.width = "".concat(a, "px"), this.$board.style.height = "".concat(s, "px")
                 }
             }, {
@@ -1247,14 +1246,6 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                 key: "connectedCallback",
                 value: function() {
                     var e = this;
-                    var min_vertical_move = 50;
-                       var max_horizontal_move = 50;
-                       var within_ms = 2000;
-
-                       var start_xPos;
-                       var start_yPos;
-                       var start_time;
-                       var height;
                     this.shadowRoot.appendChild(Ka.content.cloneNode(!0)), this.$game = this.shadowRoot.querySelector("#game"), this.$board = this.shadowRoot.querySelector("#board"), this.$keyboard = this.shadowRoot.querySelector("game-keyboard"), this.sizeBoard(), this.lastPlayedTs || setTimeout((function() {
                         return e.showHelpModal()
                     }), 100);
@@ -1262,29 +1253,6 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                         var s = document.createElement("game-row");
                         s.setAttribute("letters", this.boardState[a]), s.setAttribute("length", 5), this.evaluations[a] && (s.evaluation = this.evaluations[a]), this.$board.appendChild(s)
                     }
-                    this.shadowRoot.querySelector("game-keyboard").addEventListener("touchstart", (function(event) {
-                        start_xPos = event.touches[0].pageX;
-                        start_yPos = event.touches[0].pageY;
-                        start_time = new Date();
-                    })),
-                    this.shadowRoot.querySelector("game-keyboard").addEventListener("touchend", (function(event) {
-                      var end_xPos = event.changedTouches[0].pageX;
-                             var end_yPos = event.changedTouches[0].pageY;
-                             var end_time = new Date();
-                             let move_x = end_xPos - start_xPos;
-                             let move_y = end_yPos - start_yPos;
-                             let elapsed_time = end_time - start_time;
-                             if (Math.abs(move_y) > min_vertical_move && Math.abs(move_x) < max_horizontal_move && elapsed_time < within_ms) {
-                                 if (move_y < 0) {
-                                   event.target.setAttribute("style", "height:"+height+"px;");
-                                 } else {
-                                   height = event.target.style.height;
-                                   event.target.setAttribute("style", "height:100px;");
-
-                                 }
-                             }
-                    })),
-
                     this.$game.addEventListener("game-key-press", (function(a) {
                         var s = a.detail.key;
                         "←" === s || "Backspace" === s ? e.removeLetter() : "↵" === s || "Enter" === s ? e.submitGuess() : Ba.includes(s.toLowerCase()) && e.addLetter(s.toLowerCase())
@@ -1423,8 +1391,7 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                                 o = a.ctrlKey;
                             t || o || (Ba.includes(s.toLowerCase()) || "Backspace" === s || "Enter" === s) && e.dispatchKeyPressEvent(s)
                         }
-                    })),
-                    this.$keyboard.addEventListener("transitionend", (function(a) {
+                    })), this.$keyboard.addEventListener("transitionend", (function(a) {
                         var s = a.target.closest("button");
                         s && e.$keyboard.contains(s) && s.classList.remove("fade")
                     })), ds.forEach((function(a) {
@@ -1654,6 +1621,27 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
         }))
     }
 
+    function getSolution() {
+      var gameState = za();
+      return gameState.solution;
+    }
+
+    function explanation(word) {
+      var exp = {
+        "doubt" : "'Doubt thou the stars are fire;<br/>Doubt that the sun doth move;<br/>Doubt truth to be a liar;<br/>But never doubt I love.' - Hamlet",
+        "blood" : "Yet who would have thought the old man to have had so much blood in him. - Macbeth",
+        "parts" : "'All the world's a stage,<br/>And all the men and women merely players;<br/>They have their exits and their entrances;<br/>And one man in his time plays many <b>parts</b>' - <em>As You Like It</em>",
+        "drama" : "The word <b>drama</b> is often associated with Shakespeare, and refers to the written script or text of a play. But Shakespeare himself never used the word!",
+        "glove" : "'O, that I were a <b>glove</b> upon that hand,<br/>That I might touch that cheek!' - <em>Romeo and Juliet</em>'",
+        "maria" : "A character from \"<em>Love's Labour's Lost</em>\"",
+        "thumb" : "'No, sir, I do not bite my thumb at you, sir, but I<br/>bite my thumb, sir.' - Romeo and Juliet",
+        "clerk" : "A character from \"Henry VI, Part II\"",
+        "waste" : "'I wasted time, and now doth time waste me;' - Richard II'",
+
+      }
+      return exp[word];
+    }
+
     function As(e, a, s) {
         try {
             t = navigator.userAgent || navigator.vendor || window.opera, !/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(t) && !/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(t.substr(0, 4)) || navigator.userAgent.toLowerCase().indexOf("firefox") > -1 || void 0 === navigator.share || !navigator.canShare || !navigator.canShare(e) ? function(e) {
@@ -1674,7 +1662,7 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
         var t
     }
     var Cs = document.createElement("template");
-    Cs.innerHTML = '\n  <style>\n    .container {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n      padding: 16px 0; \n    }\n    h1 {\n      font-weight: 700;\n      font-size: 16px;\n      letter-spacing: 0.5px;\n      text-transform: uppercase;\n      text-align: center;\n      margin-bottom: 10px;\n    }\n  \n    #statistics {\n      display: flex;\n      margin-bottom: \n    }\n\n    .statistic-container {\n      flex: 1;\n    }\n\n    .statistic-container .statistic {\n      font-size: 36px;\n      font-weight: 400;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      text-align: center;\n      letter-spacing: 0.05em;\n      font-variant-numeric: proportional-nums;\n    }\n\n    .statistic.timer {\n      font-variant-numeric: initial;\n    }\n\n    .statistic-container .label {\n      font-size: 12px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      text-align: center;\n    }\n\n    #guess-distribution {\n      width: 80%;\n    }\n\n    .graph-container {\n      width: 100%;\n      height: 20px;\n      display: flex;\n      align-items: center;\n      padding-bottom: 4px;\n      font-size: 14px;\n      line-height: 20px;\n    }\n\n    .graph-container .graph {\n      width: 100%;\n      height: 100%;\n      padding-left: 4px;\n    }\n\n    .graph-container .graph .graph-bar {\n      height: 100%;\n      /* Assume no wins */\n      width: 0%;\n      position: relative;\n      background-color: var(--color-absent);\n      display: flex;\n      justify-content: center;\n    }\n\n    .graph-container .graph .graph-bar.highlight {\n      background-color: var(--color-correct);\n    }\n\n    .graph-container .graph .graph-bar.align-right {\n      justify-content: flex-end;\n      padding-right: 8px;\n    }\n\n    .graph-container .graph .num-guesses {\n      font-weight: bold;\n      color: var(--tile-text-color);\n    }\n\n    #statistics,\n    #guess-distribution {\n      padding-bottom: 10px;\n    }\n\n    .footer {\n      display: flex;\n      width: 100%;\n    }\n\n    .countdown {\n      border-right: 1px solid var(--color-tone-1);\n      padding-right: 12px;\n      width: 50%;\n    }\n\n    .share {\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      padding-left: 12px;\n      width: 50%;\n    }\n\n    .no-data {\n      text-align: center;\n    }\n\n    button#share-button {\n      background-color: var(--key-bg-correct);\n      color: var(--key-evaluated-text-color);\n      font-family: inherit;\n      font-weight: bold;\n      border-radius: 4px;\n      cursor: pointer;\n      border: none;\n      user-select: none;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      text-transform: uppercase;\n      -webkit-tap-highlight-color: rgba(0,0,0,0.3);\n      width: 80%;\n      font-size: 20px;\n      height: 52px;\n      -webkit-filter: brightness(100%);\n    }\n    button#share-button:hover {\n      opacity: 0.9;\n    }\n    button#share-button game-icon {\n      width: 24px;\n      height: 24px;\n      padding-left: 8px;\n    }\n  </style>\n\n  <div class="container">\n    <h1>Statistics</h1>\n    <div id="statistics"></div>\n    <h1>Guess Distribution</h1>\n    <div id="guess-distribution"></div>\n    <div class="footer"></div>\n  </div>\n';
+    Cs.innerHTML = '\n  <style>\n    .container {\n      display: flex;\n      flex-direction: column;\n      align-items: center;\n      justify-content: center;\n      padding: 16px 0; \n    }\n    h1 {\n      font-weight: 700;\n      font-size: 16px;\n      letter-spacing: 0.5px;\n      text-transform: uppercase;\n      text-align: center;\n      margin-bottom: 10px;\n    }\n  \n    #statistics {\n      display: flex;\n      margin-bottom: \n    }\n\n    .statistic-container {\n      flex: 1;\n    }\n\n    .statistic-container .statistic {\n      font-size: 36px;\n      font-weight: 400;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      text-align: center;\n      letter-spacing: 0.05em;\n      font-variant-numeric: proportional-nums;\n    }\n\n    .statistic.timer {\n      font-variant-numeric: initial;\n    }\n\n    .statistic-container .label {\n      font-size: 12px;\n      display: flex;\n      align-items: center;\n      justify-content: center;\n      text-align: center;\n    }\n\n    #guess-distribution {\n      width: 80%;\n    }\n\n    .graph-container {\n      width: 100%;\n      height: 20px;\n      display: flex;\n      align-items: center;\n      padding-bottom: 4px;\n      font-size: 14px;\n      line-height: 20px;\n    }\n\n    .graph-container .graph {\n      width: 100%;\n      height: 100%;\n      padding-left: 4px;\n    }\n\n    .graph-container .graph .graph-bar {\n      height: 100%;\n      /* Assume no wins */\n      width: 0%;\n      position: relative;\n      background-color: var(--color-absent);\n      display: flex;\n      justify-content: center;\n    }\n\n    .graph-container .graph .graph-bar.highlight {\n      background-color: var(--color-correct);\n    }\n\n    .graph-container .graph .graph-bar.align-right {\n      justify-content: flex-end;\n      padding-right: 8px;\n    }\n\n    .graph-container .graph .num-guesses {\n      font-weight: bold;\n      color: var(--tile-text-color);\n    }\n\n    #statistics,\n    #guess-distribution {\n      padding-bottom: 10px;\n    }\n\n    .footer {\n      display: flex;\n      width: 100%;\n    }\n\n    .countdown {\n      border-right: 1px solid var(--color-tone-1);\n      padding-right: 12px;\n      width: 50%;\n    }\n\n    .share {\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      padding-left: 12px;\n      width: 50%;\n    }\n\n    .no-data {\n      text-align: center;\n    }\n\n    button#share-button {\n      background-color: var(--key-bg-correct);\n      color: var(--key-evaluated-text-color);\n      font-family: inherit;\n      font-weight: bold;\n      border-radius: 4px;\n      cursor: pointer;\n      border: none;\n      user-select: none;\n      display: flex;\n      justify-content: center;\n      align-items: center;\n      text-transform: uppercase;\n      -webkit-tap-highlight-color: rgba(0,0,0,0.3);\n      width: 80%;\n      font-size: 20px;\n      height: 52px;\n      -webkit-filter: brightness(100%);\n    }\n    button#share-button:hover {\n      opacity: 0.9;\n    }\n    button#share-button game-icon {\n      width: 24px;\n      height: 24px;\n      padding-left: 8px;\n    }\n  </style>\n\n  <div class="container">\n    <em id="context"></em><h1>Statistics</h1>\n    <div id="statistics"></div>\n    <h1>Guess Distribution</h1>\n    <div id="guess-distribution"></div>\n    <div class="footer"></div>\n  </div>\n';
     var Ls = document.createElement("template");
     Ls.innerHTML = '\n  <div class="statistic-container">\n    <div class="statistic"></div>\n    <div class="label"></div>\n  </div>\n';
     var Ts = document.createElement("template");
@@ -1704,9 +1692,14 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                 value: function() {
                     var e = this;
                     this.shadowRoot.appendChild(Cs.content.cloneNode(!0));
-                    var a = this.shadowRoot.getElementById("statistics"),
+                    var context = this.shadowRoot.getElementById("context"),
+                        a = this.shadowRoot.getElementById("statistics"),
                         s = this.shadowRoot.getElementById("guess-distribution"),
                         t = Math.max.apply(Math, g(Object.values(this.stats.guesses)));
+                        var exp = explanation(getSolution());
+                        if (exp != null) {
+                          context.innerHTML = exp;
+                        }
                     if (Object.values(this.stats.guesses).every((function(e) {
                             return 0 === e
                         }))) {

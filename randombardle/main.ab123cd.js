@@ -1672,6 +1672,7 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
     var Is = document.createElement("template");
     Is.innerHTML = '\n  <div class="countdown">\n    <h1>Next BARDLE</h1>\n    <div id="timer">\n      <div class="statistic-container">\n        <div class="statistic timer">\n          <countdown-timer></countdown-timer>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class="share">\n    <button id="share-button">\n      Share <game-icon icon="share"></game-icon>\n    </button>\n  </div>';
     var Ms = {
+            quote: "Quote",
             currentStreak: "Current Streak",
             maxStreak: "Max Streak",
             winPercentage: "Win %",
@@ -1718,7 +1719,7 @@ return o(t, [{
                 }
                 s.appendChild(l)
             }
-        if (["gamesPlayed", "winPercentage", "currentStreak", "maxStreak"].forEach((function(s) {
+        if (["quote", "gamesPlayed", "winPercentage", "currentStreak", "maxStreak"].forEach((function(s) {
                 var t = Ms[s],
                     o = e.stats[s],
                     n = Ls.content.cloneNode(!0);
