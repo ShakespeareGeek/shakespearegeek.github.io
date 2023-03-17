@@ -1092,6 +1092,7 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
             }(o)
     }
     var Ka = document.createElement("template");
+    if (!window.fake) {
     Ka.innerHTML = "\n  <style>\n  .toaster {\n    position: absolute;\n    top: 10%;\n    left: 50%;\n    transform: translate(-50%, 0);\n    pointer-events: none;\n    width: fit-content;\n  }\n  #game-toaster {\n    z-index: ".concat(1e3, ";\n  }\n  #system-toaster {\n    z-index: ").concat(4e3, ';\n  }\n\n  #game {\n    width: 100%;\n    max-width: var(--game-max-width);\n    margin: 0 auto;\n    height: 100%;\n    display: flex;\n    flex-direction: column;\n  }\n  header {\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    height: var(--header-height);\n    color: var(--color-tone-1);\n    border-bottom: 1px solid var(--color-tone-4);\n  }\n  header .title {\n    font-weight: 700;\n    font-size: 36px;\n    letter-spacing: 0.2rem;\n    text-transform: uppercase;\n    text-align: center;\n    position: absolute;\n    left: 0;\n    right: 0;\n    pointer-events: none;\n  }\n\n  @media (max-width: 360px) {\n    header .title {\n      font-size: 22px;\n      letter-spacing: 0.1rem;\n    }\n  }\n\n  #board-container {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n    flex-grow: 1;\n    overflow: hidden;\n  }\n  #instructions { width: 80%; text-align: center; padding-left: 10%; padding-right: 10%; } #board {\n    display: grid;\n    grid-template-rows: repeat(6, 1fr);\n    grid-gap: 5px;\n    padding:10px;\n    box-sizing: border-box;\n  }\n  button.icon {\n    background: none;\n    border: none;\n    cursor: pointer;\n    padding: 0 4px;\n  }\n\n  #debug-tools {\n    position: absolute;\n    bottom: 0;\n  }\n\n  </style>\n  <game-theme-manager>\n    <div id="game">\n      <header>\n   \
          <div class="menu">\n   \
                 <button id="help-button" class="icon" aria-label="help">\n      \
@@ -1110,6 +1111,9 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                           <game-icon icon="tip"></game-icon>\n   \
                     </button>\n   \
                   </div>\n      </header>\n              <div id="board-container">\n          <div id="board"></div>\n        </div>\n  <game-keyboard></game-keyboard><div id="instructions"><p><em>Both <b>words Shakespeare used</b> and <b>character names</b> are allowed!</em></p></div>\n       <game-modal></game-modal>\n        <game-page></game-page>\n        <div class="toaster" id="game-toaster"></div>\n        <div class="toaster" id="system-toaster"></div>\n    </div>\n  </game-theme-manager>\n  <div id="debug-tools"></div>\n');
+    } else {
+      Ka.innerHTML = "<p>If you're seeing this, someone is trying to take credit for a game they did not create so they can get the traffic (and, typically, ad revenue).</p><p>If you're enjoying Bardle and want to support the author, please visit <a href='https://shakespearegeek.github.io/bardle' target='_blank'>the original Bardle homepage</a> and bookmark the link so the author can get credit for his work.</p><p><p>Thank you, and have a nice day.</p>"
+    }
     var Qa = document.createElement("template");
     Qa.innerHTML = '\n<button id="reveal">reveal</button>\n<button id="shake">shake</button>\n<button id="bounce">bounce</button>\n<button id="toast">toast</button>\n<button id="modal">modal</button>\n';
     var Za = "IN_PROGRESS",
