@@ -111,12 +111,12 @@
     <script async="" src="./js"></script>
     <script>
       (function () {
-        // Defining the hash before the main bundle allows the bundle access window.hash
-        window.bardle = window.bardle || {};
-        window.bardle.hash = 'ab123cd';
-
-       if(window.top != window.self){
+        if(window.top != window.self){
         top.location.href = document.location.href;
+        } else {
+          // Defining the hash before the main bundle allows the bundle access window.hash
+          window.bardle = window.bardle || {};
+          window.bardle.hash = 'ab123cd';
         }
       })();
     </script>
