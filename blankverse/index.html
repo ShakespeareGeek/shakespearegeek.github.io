@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+    <head>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+        <script src="jquery.cookie.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    </head>
+    <body onload="start()">
+      <style>
+      .card-footer {
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        background-color: #f5f5f5;
+                  font-family: tuers;
+
+        }
+      label,   #output, input, .form-control  {
+        font-size: 24px;
+      }
+      @font-face {
+        font-family: tuers;
+        src:url("tuers.ttf");
+      }
+      @font-face {
+        font-family: shakespeare;
+        src:url("ilshake.ttf");
+      }
+      #title, input {
+        font-family: tuers;
+      }
+      #output, #body,.input-slot {
+        font-family: shakespeare;
+      }
+      h1, .slot-label {
+        font-family: tuers;
+      }
+        .slot {
+          font-weight: bold;
+            font-size: 28px;
+        }
+      </style>
+        <div class="container">
+        <h1>Blank Verse</h1>
+            <p><em>(Where you're a poet and didn't know it!)</em></p>
+    <div class="row" id="input">
+        <ol>
+            <li>Fill in the blanks.</li>
+            <li>Enjoy your masterpiece!</li>
+        </ol>
+        <form id="input_form" class="form-horizontal">
+            <div id="slots"></div>
+            <input type="submit" value="Create Your Masterpiece"></input>
+        </form>
+    </div>
+    <div id="output">
+      <div id="title"></div>
+      <div id="body"></div>
+      <div id="controls">
+        <button id="restart-button">Create Another One</button>
+      </div>
+    </div>
+        </div>
+        <footer class="card-footer">
+    <div class="container">Follow <a href="https://www.twitter.com/ShakespeareGeek">@ShakespeareGeek</a> on Twitter </div>
+        </footer>
+
+
+        <div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Welcome to Blank Verse!</h4>
+            </div>
+            <div class="modal-body">
+                <p>You've probably played this "fill in the blank" game before.  I'll ask you for a
+                    part of speech - noun, verb, adjective and so on - and when you're done you get to
+                    see what you've done to poor master Shakespeare's most famous works.
+                </p>
+                <p>
+                    In the interest of getting the final product to make sense you'll often see very
+                    specific requests like <b>-ing verb</b> or <b>-s verb</b> instead of just <b>verb</b>.
+                    There's where you'd use "eating" or "eats" instead of just "eat". Make sense?
+                </p>
+                <p>This is version 1.0, and the first one written entirely in Javascript. So at the moment
+                there's not a lot of features. But I'm hoping, if people like it, to include things like
+                    share buttons and a gallery to share your best creations.</p>
+                <p>
+                Enjoy!
+                </p>
+            </div>
+        </div>
+    </div>
+  </div>
+        <script>
+        var version="1.1";
+    $(document).ready(function() {
+     if ($.cookie('pop_'+version) == null) {
+         $('#myModal').modal('show');
+         $.cookie('pop_'+version,'1');
+     }
+    });
+    var templates = [
+        {title: "Romeo and Juliet", body:"O #Name#, #-1#! wherefore art thou #-2#?<br/>Deny thy #Relative# and refuse thy name;<br/>Or, if thou wilt not, be but sworn my love,<br/>And I'll no longer be a #Last Name#.<br/>'Tis but thy #Noun# that is my enemy;<br/>Thou art thyself, though not a #Last Name#.<br/>What's #-1#? it is nor #Body part#, nor #Body part#,<br/>Nor arm, nor face, nor any other part<br/>Belonging to a man. O, be some other #-5#!<br/>What's in a #-6#? that which we call a rose<br/>By any other #-7# would smell as #Adjective#;<br/>So #-14# would, were #He or She# not #-14# call'd,<br/>Retain that dear perfection which #-2# owes<br/>Without that title. #-18#, doff thy #-14#,<br/>And for that #-15# which is no part of thee<br/>Take all myself"},
+      {title: "Sonnet 18", body:"Shall I compare thee to a #Season#'s day?<br/>Thou art more #Adjective# and more temperate:<br/>#Adjective# #Plural Noun# do #Verb# the darling #Plural Noun# of May,<br/>And #-6#'s #Noun# hath all too #Adjective# a date:<br/>Sometime too #Adjective# the #Body Part# of heaven shines,<br/>And often is his #Color# complexion dimm'd;<br/>And every fair from fair sometime declines,<br/>By chance or nature's changing course untrimm'd;<br/>But thy eternal #-12# shall not fade<br/>Nor lose possession of that fair thou owest;<br/>Nor shall #Mythological Person# brag thou wander'st in his shade,<br/>When in eternal lines to time thou growest:<br/>So long as #Plural Noun# can #Verb# or #Body Parts# can #Verb#,<br/>So long lives #Noun# and #-1# gives #Noun# to #Noun#." },
+      {title: "Macbeth", body:"Is this a #Pointy Thing# which I see #Preposition# me,<br/>The handle toward my #Body Part#? Come, let me #Command# thee.<br/>I #Verb# thee not, and yet I #Verb# thee still.<br/>Art thou not, #Adjective# #-7#, sensible<br/>To feeling as to #Sense#? or art thou but<br/>A #-9# of the #Body Part#, a false creation, <br/>Proceeding from the heat-oppressed #Body Part#?"},
+      {title: "As You Like It", body:"All the world's a #Noun#,<br/>And all the #Plural Noun# and #Plural Noun# merely #Jobs#:<br/>They have their exits and their entrances;<br/>And one #Noun# in his time #-s Verb# many #Plural Noun#,<br/>His acts being #Number# ages."},
+        {title: "A Midsummer Night's Dream", body:"If we #Plural Noun# have offended,<br/>#Command# but this, and all is mended,<br/>That you have but #Past Tense Verb# here<br/>While these #Plural Noun# did appear.<br/>And this #Adjective# and #Adjective# theme,<br/>No more yielding but a dream,<br/>Gentles, do not reprehend:<br/>if you pardon, we will mend:<br/>And, as I am an honest Puck,<br/>If we have unearned luck<br/>Now to 'scape the #Animal#'s tongue,<br/>We will make amends ere long;<br/>Else the Puck a #Noun# call;<br/>So, good night unto you all.<br/>Give me your #Body Parts#, if we be friends,<br/>And Robin shall restore amends."},
+        {title: "Julius Caesar", body:"Friends, Romans, countrymen, lend me your #Body parts#;<br/>I come to bury #Name#, not to praise #Him or Her#.<br/>The evil that men do #-s Verb# after them;<br/>The good is oft interred with their #Body parts#;<br/>So let it be with #-4#. The noble #Name#<br/>Hath told you #-6# was #Adjective#:<br/>If it were so, it was a grievous fault,<br/>And grievously hath #-8# answer'd it.<br/>Here, under leave of #-4# and the rest--<br/>For #-5# is an #Adjective# man;<br/>So are they all, all #Adjective# men--<br/>Come I to speak in #-13#'s funeral."},
+        {title: "Romeo and Juliet", body:"But, soft! what #Noun# through yonder #Noun# breaks?<br/>It is the east, and #Name# is the #Noun#.<br/>Arise, fair #-1#, and kill the envious #Noun#,<br/>Who is already #Adjective# and #Adjective# with grief,<br/>That thou her #Job# art far more #Adjective# than she:<br/>Be not her #-2#, since she is #Adjective#;<br/>Her vestal livery is but #Adjective# and #Adjective#<br/>And none but #Plural Noun# do #Verb# it; cast it off.<br/>It is my #Noun#, O, it is my #Noun#!<br/>O, that she knew she were!"},
+        {title: "The Merchant of Venice", body:"I am a Jew. Hath not a Jew #Things you possess#? hath not a Jew #Body parts#, organs, dimensions, senses, affections, passions? fed with the same #Stuff you eat#, hurt with the same #Dangerous things#, subject to the same diseases, healed by the same means, warmed and cooled by the same winter and summer, as a Christian is? If you prick us, do we not bleed? if you tickle us, do we not laugh? if you poison us, do we not die? and if you wrong us, shall we not revenge? If we are like you in the rest, we will resemble you in that. If a Jew wrong a Christian, what is his humility? Revenge. If a Christian wrong a Jew, what should his sufferance be by Christian example? Why, revenge. The villany you teach me, I will execute, and it shall go hard but I will better the instruction."}
+    ];
+    var template;
+    var pieces;
+    var slots;
+
+    $('#restart-button').on('click', function() {
+      start();
+    });
+    function start() {
+      template = templates[Math.floor(Math.random() * templates.length)];
+      pieces = template.body.split('#');
+      slots=[];
+        $('#slots').html('');
+        $('#title').html('');
+        $('#body').html('');
+        $('#output').hide();
+        $('#input').show();
+        pos =  0 ;
+        while (pos*2+1  <  pieces.length) {
+            p =  pieces[pos*2+1]
+            if (parseInt(p) < 0) {
+              console.log("Offset by "+p+" is "+slots[slots.length+parseInt(p)].slot+" at "+slots[slots.length+parseInt(p)].index);
+                slots.push({slot:slots[slots.length+parseInt(p)].slot, index: pos, virtual: true})
+                pieces[pos*2+1]="<span class='slot virtual slot-"+(slots.length+parseInt(p)-1)+"'></span>";
+                console.log("At index "+pos+" You asked for offset "+p+" which gives us "+(slots.length+parseInt(p)-1))
+            } else {
+              console.log(p+" at "+pos);
+                slots.push({slot:p, index:pos, virtual: false});
+                pieces[pos*2+1]="<span class='slot slot-"+pos+"'></span>";
+            }
+            pos = pos + 1
+        }
+        for (var s in slots) {
+          if (!slots[s].virtual) {
+            $('#slots').append("<div id='row-slot-"+s+"' class='row  form-group'><div class='col-sm-2' style='text-align:  right;'><label for=slot-"+s+" class='slot-label'>"+slots[s].slot+"</label></div><div class='col-sm-6'><input class='form-control input-slot' id=slot-"+s+" type='text' required></input></div></div>");
+          }
+        }
+
+        $('#slot-0').focus();
+        $('#title').html(template.title);
+        $('#body').html(pieces.join(''));
+
+    }
+    $('#input_form').on('submit', function() {
+      $('.input-slot').each(function(e) {
+        var value = $(this).val();
+        var name = $(this).attr('id');
+        $("."+name).html(value);
+      })
+      $('#output').show();
+      $('#input').hide();
+      return false;
+    })
+    </script>
+    </body>
+</html>
