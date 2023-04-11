@@ -111,9 +111,14 @@
     <script async="" src="./js"></script>
     <script>
       (function () {
-        // Defining the hash before the main bundle allows the bundle access window.hash
-        window.bardle = window.bardle || {};
-        window.bardle.hash = 'ab123cd';
+        if(window.top != window.self){
+        window.fake = true;
+        } else {
+          // Defining the hash before the main bundle allows the bundle access window.hash
+          window.bardle = window.bardle || {};
+          window.bardle.hash = 'ab123cd';
+          window.fake = false;
+        }
       })();
     </script>
     <script src="./main.ab123cd.js"></script>
