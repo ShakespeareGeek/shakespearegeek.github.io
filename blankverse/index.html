@@ -9,6 +9,11 @@
   gtag('js', new Date());
 
   gtag('config', 'G-57WQMBR54Q');
+
+  function record_event(name, values) {
+      gtag('event', name, values);
+    }
+
 </script>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
       <!-- Latest compiled and minified CSS -->
@@ -33,6 +38,10 @@
         background-color: #f5f5f5;
                   font-family: tuers;
 
+        }
+
+        .form-control {
+          padding: 5px;
         }
       label,   #output, input, .form-control  {
         font-size: 24px;
@@ -81,7 +90,8 @@
     </div>
         </div>
         <footer class="card-footer">
-    <div class="container">Follow <a href="https://www.twitter.com/ShakespeareGeek">@ShakespeareGeek</a> on Twitter </div>
+    <div class="pull-left">Follow <a href="https://www.twitter.com/ShakespeareGeek">@ShakespeareGeek</a> on Twitter</div>
+    <div class="pull-right"><script type='text/javascript' src='https://storage.ko-fi.com/cdn/widget/Widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Keep Making Shakspeare Things', '#29abe0', 'D1D5AKEGY');kofiwidget2.draw();</script> </div>
         </footer>
 
 
@@ -112,14 +122,16 @@
         </div>
     </div>
   </div>
-        <script>
-        var version="1.1";
+  <script>
+    var version=1.1;
     $(document).ready(function() {
-     if ($.cookie('pop_'+version) == null) {
-         $('#myModal').modal('show');
-         $.cookie('pop_'+version,'1');
-     }
+      let sawModal = localStorage.getItem("sawModal");
+      if (sawModal == null || sawModal < version) {
+        $('#myModal').modal('show');
+        localStorage.setItem("sawModal", version);
+      }
     });
+
     var templates = [
         {title: "Romeo and Juliet", body:"O #Name#, #-1#! wherefore art thou #-2#?<br/>Deny thy #Relative# and refuse thy name;<br/>Or, if thou wilt not, be but sworn my love,<br/>And I'll no longer be a #Last Name#.<br/>'Tis but thy #Noun# that is my enemy;<br/>Thou art thyself, though not a #Last Name#.<br/>What's #-1#? it is nor #Body part#, nor #Body part#,<br/>Nor arm, nor face, nor any other part<br/>Belonging to a man. O, be some other #-5#!<br/>What's in a #-6#? that which we call a rose<br/>By any other #-7# would smell as #Adjective#;<br/>So #-14# would, were #He or She# not #-14# call'd,<br/>Retain that dear perfection which #-2# owes<br/>Without that title. #-18#, doff thy #-14#,<br/>And for that #-15# which is no part of thee<br/>Take all myself"},
       {title: "Sonnet 18", body:"Shall I compare thee to a #Season#'s day?<br/>Thou art more #Adjective# and more temperate:<br/>#Adjective# #Plural Noun# do #Verb# the darling #Plural Noun# of May,<br/>And #-6#'s #Noun# hath all too #Adjective# a date:<br/>Sometime too #Adjective# the #Body Part# of heaven shines,<br/>And often is his #Color# complexion dimm'd;<br/>And every fair from fair sometime declines,<br/>By chance or nature's changing course untrimm'd;<br/>But thy eternal #-12# shall not fade<br/>Nor lose possession of that fair thou owest;<br/>Nor shall #Mythological Person# brag thou wander'st in his shade,<br/>When in eternal lines to time thou growest:<br/>So long as #Plural Noun# can #Verb# or #Body Parts# can #Verb#,<br/>So long lives #Noun# and #-1# gives #Noun# to #Noun#." },
@@ -150,20 +162,21 @@
         while (pos*2+1  <  pieces.length) {
             p =  pieces[pos*2+1]
             if (parseInt(p) < 0) {
-              console.log("Offset by "+p+" is "+slots[slots.length+parseInt(p)].slot+" at "+slots[slots.length+parseInt(p)].index);
                 slots.push({slot:slots[slots.length+parseInt(p)].slot, index: pos, virtual: true})
                 pieces[pos*2+1]="<span class='slot virtual slot-"+(slots.length+parseInt(p)-1)+"'></span>";
-                console.log("At index "+pos+" You asked for offset "+p+" which gives us "+(slots.length+parseInt(p)-1))
             } else {
-              console.log(p+" at "+pos);
                 slots.push({slot:p, index:pos, virtual: false});
                 pieces[pos*2+1]="<span class='slot slot-"+pos+"'></span>";
             }
             pos = pos + 1
         }
+        console.log(slots.length);
         for (var s in slots) {
           if (!slots[s].virtual) {
-            $('#slots').append("<div id='row-slot-"+s+"' class='row  form-group'><div class='col-sm-2' style='text-align:  right;'><label for=slot-"+s+" class='slot-label'>"+slots[s].slot+"</label></div><div class='col-sm-6'><input class='form-control input-slot' id=slot-"+s+" type='text' required></input></div></div>");
+            $('#slots').append("<div id='row-slot-"+s+"' class='row  form-group'><div class='col-sm-2' "+
+              "style='text-align:  right;'><label for=slot-"+s+" class='slot-label'>"+
+              slots[s].slot+"</label></div><div class='col-sm-6'>"+
+              "<input onfocus=\"record_event('slot_entered', {slot:"+s+", total:"+slots.length+"});\" class='form-control input-slot' id=slot-"+s+" type='text' required></input></div></div>");
           }
         }
 
@@ -182,6 +195,7 @@
       $('#input').hide();
       return false;
     })
+
     </script>
     </body>
 </html>
