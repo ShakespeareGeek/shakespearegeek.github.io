@@ -147,10 +147,13 @@
     var slots;
 
     $('#restart-button').on('click', function() {
+      record_event('click', {'restart': true});
       start();
     });
     function start() {
-      template = templates[Math.floor(Math.random() * templates.length)];
+      let index = Math.floor(Math.random() * templates.length);
+      record_event('start', {'index': index});
+      template = templates[index];
       pieces = template.body.split('#');
       slots=[];
         $('#slots').html('');
@@ -176,7 +179,7 @@
             $('#slots').append("<div id='row-slot-"+s+"' class='row  form-group'><div class='col-sm-2' "+
               "style='text-align:  right;'><label for=slot-"+s+" class='slot-label'>"+
               slots[s].slot+"</label></div><div class='col-sm-6'>"+
-              "<input onfocus=\"record_event('slot_entered', {slot:"+s+", total:"+slots.length+"});\" class='form-control input-slot' id=slot-"+s+" type='text' required></input></div></div>");
+              "<input onfocus=\"record_event('slot_entered', {'slot':"+s+", 'total':"+slots.length+"});\" class='form-control input-slot' id=slot-"+s+" type='text' required></input></div></div>");
           }
         }
 
