@@ -19,11 +19,12 @@
       var location = document.getElementById("location").value;
       var form = document.getElementById("form");
       var authorization_key = "Hu6shcXvayKEGFceQVX3z9lKkGDYpFLGsh+265Q5lX8=";
-
       // Make an API call to USAJOBS
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "https://api.usajobs.gov/v2/jobs?keyword=" + keyword + "&location=" + location);
       xhr.setRequestHeader("Authorization", "Bearer " + authorization_key);
+      xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+
       xhr.onload = function() {
         if (xhr.status === 200) {
           // The request was successful
