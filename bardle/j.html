@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Indeed Jobs API Demo</title>
+</head>
+<body>
+  <h1>Indeed Jobs API Demo</h1>
+  <input type="text" id="keyword" placeholder="Enter keyword">
+  <input type="text" id="location" placeholder="Enter location">
+  <button onclick="search()">Search</button>
+  <ul id="jobs"></ul>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    function search() {
+      // Get the keyword and location from the input fields.
+      var keyword = $("#keyword").val();
+      var location = $("#location").val();
+
+      // Make a request to the Indeed jobs API.
+      $.ajax({
+        url: "https://api.indeed.com/v2/jobs?q=" + keyword + "&l=" + location,
+        type: "GET",
+        success: function(data) {
+          // Parse the JSON response and display the job listings.
+          var jobs = data.results;
+          for (var i = 0; i < jobs.length; i++) {
+            var job = jobs[i];
+            var li = document.createElement("li");
+            li.textContent = job.jobTitle;
+            li.onclick = function() {
+              // Navigate to the job listing.
+              window.location = job.url;
+            };
+            $("#jobs").append(li);
+          }
+        },
+        error: function(error) {
+          // Handle the error.
+          console.log(error);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
