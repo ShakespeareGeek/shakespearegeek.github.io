@@ -1896,7 +1896,7 @@ this.bardle = this.bardle || {}, this.bardle.bundle = function(e) {
                     <p>The letter <strong>U</strong> is not in the word in any spot.</p>\n        
                     </div>\n      </div>\n      
                     <p><strong>A new BARDLE will be available each day!<strong></p>\n
-                    <p><a href="https://www.shakespearegeek.com/principal-software-engineer-for-hire/">Shakespeare Geek is available for hire!</a>!</p>    
+    
                     </div>\n  </section>\n`;
     var Hs = function(e) {
         r(t, e);
