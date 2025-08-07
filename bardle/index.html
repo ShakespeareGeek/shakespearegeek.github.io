@@ -133,5 +133,272 @@
     </script>
     <game-app></game-app>
 
+    <!-- Pairicles Advertisement Modal -->
+    <div id="pairicles-modal" class="pairicles-modal" style="display: none;">
+      <div class="pairicles-modal-backdrop"></div>
+      <div class="pairicles-modal-content">
+        <button class="pairicles-modal-close" aria-label="Close">&times;</button>
+        <div class="pairicles-modal-header">
+          <h2>&#127917; Think you know Shakespeare? &#127917;</h2>
+        </div>
+        <div class="pairicles-modal-body">
+          <p>Try our new game! Match the plays, test your memory, prove your literary prowess.</p>
+          <p><em>New challenge daily.</em></p>
+          <div class="pairicles-modal-buttons">
+            <a href="https://shakespearegeek.com/pairicles" class="pairicles-btn pairicles-btn-primary" target="_blank">Play Pairicles Now!</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .pairicles-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .pairicles-modal-backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+      }
+
+      .pairicles-modal-content {
+        position: relative;
+        background: var(--modal-content-bg, #ffffff);
+        color: var(--color-tone-1, #000000);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+        width: 90%;
+        padding: 0;
+        animation: pairiclesModalSlideIn 0.3s ease-out;
+      }
+
+      .pairicles-modal-close {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: var(--color-tone-3, #666666);
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+      }
+
+      .pairicles-modal-close:hover {
+        background: var(--color-tone-6, #f0f0f0);
+        color: var(--color-tone-1, #000000);
+      }
+
+      .pairicles-modal-header {
+        padding: 24px 24px 16px 24px;
+        text-align: center;
+        border-bottom: 1px solid var(--color-tone-6, #f0f0f0);
+      }
+
+      .pairicles-modal-header h2 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--color-tone-1, #000000);
+      }
+
+      .pairicles-modal-header h2 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--color-tone-1, #000000);
+      }
+
+      .pairicles-modal-body {
+        padding: 24px;
+        text-align: center;
+      }
+
+      .pairicles-modal-body p {
+        margin: 0 0 16px 0;
+        font-size: 16px;
+        line-height: 1.5;
+        color: var(--color-tone-2, #333333);
+      }
+
+      .pairicles-modal-body p:last-of-type {
+        margin-bottom: 24px;
+      }
+
+      .pairicles-modal-buttons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .pairicles-btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 120px;
+      }
+
+      .pairicles-btn-primary {
+        background: #6aaa64;
+        color: white;
+        border: 2px solid #6aaa64;
+      }
+
+      .pairicles-btn-primary:hover {
+        background: #5a9a54;
+        border-color: #5a9a54;
+        transform: translateY(-1px);
+      }
+
+      .pairicles-btn-secondary {
+        background: transparent;
+        color: var(--color-tone-2, #333333);
+        border: 2px solid var(--color-tone-4, #cccccc);
+      }
+
+      .pairicles-btn-secondary:hover {
+        background: var(--color-tone-6, #f0f0f0);
+        border-color: var(--color-tone-3, #666666);
+      }
+
+      @keyframes pairiclesModalSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-20px) scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      @media (max-width: 480px) {
+        .pairicles-modal-content {
+          margin: 20px;
+          width: calc(100% - 40px);
+        }
+
+        .pairicles-modal-buttons {
+          flex-direction: column;
+        }
+
+        .pairicles-btn {
+          width: 100%;
+        }
+      }
+    </style>
+
+    <script>
+      (function() {
+        const MODAL_STORAGE_KEY = 'pairicles-modal-seen';
+        const MODAL_VERSION = '1.0';
+        const modal = document.getElementById('pairicles-modal');
+        const closeBtn = document.querySelector('.pairicles-modal-close');
+        const backdrop = document.querySelector('.pairicles-modal-backdrop');
+
+        function hasSeenModal() {
+          try {
+            const stored = localStorage.getItem(MODAL_STORAGE_KEY);
+            return stored === MODAL_VERSION;
+          } catch (e) {
+            // Fallback to cookies if localStorage is not available
+            return document.cookie.indexOf('pairicles-modal-seen=true') !== -1;
+          }
+        }
+
+        function isReturningPlayer() {
+          try {
+            const gameState = localStorage.getItem('gameState');
+            if (gameState) {
+              const parsedState = JSON.parse(gameState);
+              // Check if user has played before (has lastPlayedTs)
+              return !!(parsedState && parsedState.lastPlayedTs);
+            }
+            return false;
+          } catch (e) {
+            // If we can't parse the game state, assume they're new
+            return false;
+          }
+        }
+
+        function markModalAsSeen() {
+          try {
+            localStorage.setItem(MODAL_STORAGE_KEY, MODAL_VERSION);
+          } catch (e) {
+            // Fallback to cookies if localStorage is not available
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000)); // 1 year
+            document.cookie = 'pairicles-modal-seen=true; expires=' + expires.toUTCString() + '; path=/';
+          }
+        }
+
+        function showModal() {
+          modal.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+          
+          // Focus management for accessibility
+          modal.setAttribute('aria-hidden', 'false');
+          closeBtn.focus();
+        }
+
+        function hideModal() {
+          modal.style.display = 'none';
+          document.body.style.overflow = '';
+          modal.setAttribute('aria-hidden', 'true');
+          markModalAsSeen();
+        }
+
+        function handleKeyDown(e) {
+          if (e.key === 'Escape' && modal.style.display === 'flex') {
+            hideModal();
+          }
+        }
+
+        // Event listeners
+        closeBtn.addEventListener('click', hideModal);
+        backdrop.addEventListener('click', hideModal);
+        document.addEventListener('keydown', handleKeyDown);
+
+        // Initialize modal
+        modal.setAttribute('aria-hidden', 'true');
+        modal.setAttribute('role', 'dialog');
+        modal.setAttribute('aria-labelledby', 'pairicles-modal-title');
+
+        // Show modal only to returning players who haven't seen it before
+        // Wait a bit to ensure the game has loaded
+        setTimeout(function() {
+          if (!hasSeenModal() && isReturningPlayer()) {
+            showModal();
+          }
+        }, 1500);
+      })();
+    </script>
+
 
 </html>
